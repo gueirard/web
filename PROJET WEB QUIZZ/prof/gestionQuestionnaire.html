@@ -1,0 +1,219 @@
+<!doctype html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>Gestion du Questionnaire</title>
+	<link href="http://10.0.2.20/CSS/style.css" rel="stylesheet" type="text/css">
+	<link href="http://10.0.2.20/CSS/styleGestion.css" rel="stylesheet" type="text/css">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+	<script>
+	
+		$(document).ready(function(){ 
+			var nbReponse;
+			getTheme();
+			return function(){
+				$("#btnReponses").click(function(){
+					$(".rep").remove();
+					nbReponse = $("#nbRep").val();
+					$("#reponses").append("<div class=rep>Bonne reponse : <input id=reponse0></input> value : <input id=value0 ></input><br><br></div>");
+					for(var i = 1; i < nbReponse; i++)
+					{
+						$("#reponses").append("<div class=rep>Reponse : <input id=reponse"+ i +"> value : </input> <input id=value"+ i +"></input><br><br></div>");
+					}
+				});
+			}();
+		});
+		
+		$(document).ready(function(){
+			$("#btnNDelQuestion").click(function(){
+				deleteQuestion();
+				location.reload();
+			});
+		})
+		
+		$(document).ready(function(){ 
+
+			return function(){
+				$("#btnNewTheme").click(function(){
+					addTheme();
+					location.reload();
+					
+				});
+			}();
+		});
+		
+		$(document).ready(function(){ 
+			return function(){
+				$("#btnNewQuestion").click(function(){
+					addQuestion();
+					location.reload();
+					
+				});
+			}();
+		});
+		
+		$(document).ready(function(){ 
+			return function(){
+				$("#btnDelTheme").click(function(){
+					deleteTheme();
+					location.reload();
+				});
+			}();
+		});
+		
+		$(document).ready(function(){
+			$("#getSupprQuestionTheme").change(function(){
+				$('.questionASuppr').remove();
+				getQuestions();
+			});
+		})
+		
+		var getTheme = function(){
+			$.ajax({
+				type:"GET",
+				url:"http://10.0.2.20/PHP/getTheme.php"
+			}).done(function(data){
+				console.log(data);
+				var theme = JSON.parse(data);
+				for(var i in theme){
+					if(i == 0){
+					$("#unTheme").append("<option value="+ theme[i].id +" selected>"+ theme[i].theme +"</option>");
+					$("#ajoutQuestionTheme").append("<option value="+ theme[i].id +" selected>"+ theme[i].theme +"</option>");
+					$("#getSupprQuestionTheme").append("<option value="+ theme[i].id +" selected>"+ theme[i].theme +"</option>");
+					}
+					else
+					{
+					$("#unTheme").append("<option value="+ theme[i].id +">"+ theme[i].theme +"</option>");
+					$("#ajoutQuestionTheme").append("<option value="+ theme[i].id +">"+ theme[i].theme +"</option>");
+					$("#getSupprQuestionTheme").append("<option value="+ theme[i].id +">"+ theme[i].theme +"</option>");
+					}
+				}
+				getQuestions();
+			});
+		};
+		
+		var addTheme = function(){
+			var name_theme = $("#newTheme").val();
+			var nbQuestion = $("#nbQuesAff").val();
+			$.ajax({
+				type: "GET",
+				url: "http://10.0.2.20/PHP/addTheme.php",
+				data:{ theme: name_theme, nbQuest: nbQuestion},
+				success: function(data){
+					console.log(data); 
+				}
+			});
+		};
+		
+		var deleteTheme = function(){
+			var name_theme = $("#unTheme").val();
+			$.ajax({
+				type: "GET",
+				url: "http://10.0.2.20/PHP/deleteTheme.php",
+				data:{ theme: name_theme },
+				success: function(data){
+					console.log(data); 
+				}
+			});
+		};
+		
+		var addQuestion = function(){
+			var nomtheme = $("#ajoutQuestionTheme").val();
+			var laQuestion = $("#question").val();
+			var lIndice = $("#indice").val();
+			var tab_reponses = new Array();
+			var tab_values = new Array();
+			var nbRep = $("#nbRepAff").val();
+			for (var i = 0; i< $("#nbRep").val(); i++){
+				tab_reponses.push($("#reponse"+i).val());
+				tab_values.push($("#value"+i).val());
+			}
+			var param = {theme: nomtheme, question: laQuestion, indice: lIndice, reponses: tab_reponses, values: tab_values, nombreReponse: nbRep}
+			$.ajax({
+				type: "GET",
+				url: "http://10.0.2.20/PHP/addQuestion.php",
+				data: param,
+				success: function(data){
+					console.log(data); 
+				}
+			});
+		};
+		
+		var getQuestions = function(){
+			var nomtheme = $("#getSupprQuestionTheme").val();
+			$.ajax({
+				type: "GET",
+				url: "http://10.0.2.20/PHP/getQuestion.php",
+				data: { theme: nomtheme},
+				success: function(data){
+					console.log(data);
+					var questions = JSON.parse(data);
+					for(var i in questions){
+						$("#supprQuestion").append("<option class=questionASuppr value="+ questions[i].id +">"+ questions[i].question +"</option>");
+					}
+				}
+			});
+		};
+		
+		var deleteQuestion = function(){
+			var nomTheme = $("#getSupprQuestionTheme").val();
+			var nomQuestion = $("#supprQuestion").val();
+			$.ajax({
+				type: "GET",
+				url: "http://10.0.2.20/PHP/deleteQuestion.php",
+				data:{ theme: nomTheme, question: nomQuestion },
+				success: function(data){
+					console.log(data);
+				}
+			});
+		};
+		
+	</script>
+</head>
+<body>
+<header>
+<nav>
+	<h1>Gestion du Questionnaire</h1>
+	<ul>
+		<li><a href="http://10.0.2.20/prof/gestionQuestionnaire.html">Gerer le questionnaire</a></li>
+		<li><a href="http://10.0.2.20/prof/dashboard.html">Score</a></li>
+	</ul>
+</nav>
+</header>
+	<h2>Créer un thème</h2>
+		Thème : <input id="newTheme"  name=""><br><br>
+		Nombre de Question affiché : <input type="number" id="nbQuesAff" name="quantity" min="1" max="10" value=1><br><br>
+		<button id=btnNewTheme>Ajouter le Thème</button><br>
+	<br>
+	<h2>Supprimer un thème</h2>
+	Thème : <select id="unTheme"name="unTheme">
+	</select><br><br>
+	<button id=btnDelTheme>Supprimer le thème</button><br>
+	<br>
+	<hr>
+	<br>
+	<h2> Créer une question</h2>
+		Thème : <select id="ajoutQuestionTheme" name="ajoutQuestionTheme">
+
+		</select>
+		<br><br>
+		Question : <input id="question"  name="laQuestion"><br><br>
+		Indice : <input id="indice" name="lIndice"><br><br>
+		Nombre de reponse : <input type="number" id="nbRep" name="quantity" min="2" max="10" value=2>
+		<button id=btnReponses>Valider</button><br><br>
+		<fieldset id=reponses>
+		
+		</fieldset><br>
+		 Nombre de reponse affiché : <input type="number" id="nbRepAff" name="quantity" min="2" max="10" value=2><br><br>
+		<button id=btnNewQuestion>Ajouter la question</button><br>
+		<br>
+		<h2>Supprimer une question</h2>
+		Thème : <select id="getSupprQuestionTheme" name="getSupprQuestionTheme">
+
+		</select><br><br>
+		Question : <select id="supprQuestion" name="supprQuestion">
+
+		</select><br><br>
+		<button id=btnNDelQuestion>Supprimer la question</button><br>
+</body>
+</html>

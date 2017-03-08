@@ -1,0 +1,29 @@
+body {
+background-image:  url(http://10.0.2.20/IMG/1.jpg);
+background-position: left left;
+background-size: cover;
+}
+
+#entete 
+	{
+		text-align : center;
+		width: 100%;
+		height: auto;
+	}
+	
+div {
+	color: #0166FE;
+	text-shadow: 2px 0 0 #cce6ff, -2px 0 0 #cce6ff, 0 2px 0 #cce6ff, 0 -2px 0 #cce6ff, 1px 1px #cce6ff, -1px -1px 0 #cce6ff, 1px -1px 0 #cce6ff, -1px 1px 0 #cce6ff;
+}
+#contenu
+	{
+		color:#0166FE;
+		font-size:180%;
+		font-weight : bolder;
+		text-align : center;
+		color: #fff;
+	}
+table {
+	text-align:center;
+}
+	

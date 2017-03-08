@@ -1,0 +1,7 @@
+AuthUserFile /var/www/html/prof/.htpasswd
+AuthName "Accès sécurisé au site Nice 1"
+AuthType Basic
+<LIMIT GET POST>
+Require valid-user
+</LIMIT>
+

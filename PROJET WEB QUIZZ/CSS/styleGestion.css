@@ -1,0 +1,78 @@
+nav
+{
+    display: inline-block;
+    width: 1024px;
+    text-align: center;
+}
+
+nav ul
+{
+    list-style-type: none;
+}
+
+nav li
+{
+    display: inline-block;
+    margin-right: 15px;
+}
+
+nav a
+{
+    font-size: 1.3em;
+    color: #181818;
+    padding-bottom: 3px;
+    text-decoration: none;
+}
+
+nav a:hover
+{
+    color: navy;
+    border-bottom: 3px solid navy;
+}
+
+#indice{
+	height: 1em;
+	margin:auto;
+}
+
+h1 {
+	text-align:center;
+	color: #760001;
+}
+
+header{
+    margin:auto;
+    text-align:center;
+}
+h2{
+	color: navy;
+}
+
+h3{
+	text-align:center;
+	color: navy;
+}
+
+table {
+  margin: auto;
+  text-align: center;
+}
+
+td {
+  text-align: center;
+  background: #cce0ff;
+}
+
+th {
+  background: #0166FE;
+  color: white;
+  font-weight: bold;
+}
+
+#score{
+ width:75%;
+}
+
+#scoreTotal{
+width: 25%;
+}

@@ -1,0 +1,84 @@
+<html>
+    <head>
+	<link rel="stylesheet" type="text/css" href="../CSS/style.css"/>
+	<link rel="stylesheet" type="text/css" href="../CSS/styleGestion.css"/>
+	<meta charset="utf-8">
+	<title>DashBoard</title>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+	<script>
+		$(document).ready(function(){
+			return function(){
+				$( window ).load(function() {
+					getScore();
+					getScoreTotal();
+				});
+			}();
+		});
+		
+		
+		var getScore = function(){
+			$.ajax({
+				type:"GET",
+				url:"http://10.0.2.20/PHP/getScore.php"
+			}).done(function(data){
+				console.log(data);
+				var score = JSON.parse(data);
+				for(var i in score){
+					$("#score").append("<tr><td>" + score[i].theme +"</td><td>" + score[i].question +"</td><td>" + score[i].nom +"</td><td>" + score[i].score +"</td></tr>");
+				}
+			});
+		 };
+		 
+		 var getScoreTotal = function(){
+			$.ajax({
+				type:"GET",
+				url:"http://10.0.2.20/PHP/getScoreTotal.php"
+			}).done(function(data){
+				console.log(data);
+				var scoreTotal = JSON.parse(data);
+				for(var i in scoreTotal){
+					$("#scoreTotal").append("<tr><td>" + scoreTotal[i].nom +"</td><td>" + scoreTotal[i].scoreTotal +"</td></tr>");
+
+				}
+			});
+		 };
+	</script>
+	<meta http-equiv="refresh" content="10;URL='http://10.0.2.20/prof/dashboard.html'">
+    </head>
+    <body>
+	<header>
+<nav>
+	<h1>Gestion du Questionnaire</h1>
+	<ul>
+		<li><a href="http://10.0.2.20/prof/gestionQuestionnaire.html">Gerer le questionnaire</a></li>
+		<li><a href="http://10.0.2.20/prof/dashboard.html">Score</a></li>
+	</ul>
+</nav>
+</header>
+
+<div id=global>
+	<div id=Question>
+		<h3>Score par question</h3>
+		<table id=score>
+			<tr>
+				<th>Thème</th>
+				<th>Question</th> 
+				<th>Utilisateur</th>
+				<th>Score</th>
+			</tr>
+		</table></br>
+	</div>
+	<div id=Total>
+		<h3>Score Total</h3>
+		<table id=scoreTotal>
+			<tr>
+				<th>Utilisateur</th>
+				<th>Score total</th>
+			</tr>
+		</table>
+	</div>
+</div>
+    </body>
+</html>
+
+
